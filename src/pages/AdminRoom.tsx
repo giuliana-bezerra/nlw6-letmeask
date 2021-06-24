@@ -1,12 +1,12 @@
 import { useHistory, useParams } from 'react-router-dom';
-import logoImg from '../assets/images/logo.svg';
-import { Button } from '../components/Button';
-import { Question } from '../components/Question';
-import { RoomCode } from '../components/RoomCode';
-import { useRoom } from '../hooks/useRoom';
-import '../styles/rooms.scss';
 import deleteImg from '../assets/images/delete.svg';
+import { EmptyQuestions } from '../components/EmptyQuestions';
+import { Header } from '../components/Header';
+import { Loading } from '../components/Loading';
+import { Question } from '../components/Question';
+import { useRoom } from '../hooks/useRoom';
 import { database } from '../services/firebase';
+import '../styles/rooms.scss';
 
 type RoomParams = {
   id: string;
@@ -30,39 +30,42 @@ export function AdminRoom() {
       await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
     }
   }
+
+  if (!title)
+    return (
+      <div id="page-room">
+        <Header roomId={roomId} handleEndRoom={handleEndRoom} />
+        <Loading />
+      </div>
+    );
+
   return (
     <div id="page-room">
-      <header>
-        <div className="content">
-          <img src={logoImg} alt="Letmeask" />
-          <div>
-            <RoomCode code={roomId} />
-            <Button isOutlined onClick={handleEndRoom}>
-              Encerrar sala
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header roomId={roomId} handleEndRoom={handleEndRoom} />
       <main>
         <div className="room-title">
           <h1>Sala {title}</h1>
           {questions.length > 0 && <span>{questions.length} perguntas</span>}
         </div>
         <div className="question-list">
-          {questions.map((question) => (
-            <Question
-              key={question.id}
-              content={question.content}
-              author={question.author}
-            >
-              <button
-                type="button"
-                onClick={() => handleDeleteQuestion(question.id)}
+          {questions.length === 0 ? (
+            <EmptyQuestions description="Envie o código desta sala para seus amigos e comece a responder perguntas!" />
+          ) : (
+            questions.map((question) => (
+              <Question
+                key={question.id}
+                content={question.content}
+                author={question.author}
               >
-                <img src={deleteImg} alt="Remover pergunta" />
-              </button>
-            </Question>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => handleDeleteQuestion(question.id)}
+                >
+                  <img src={deleteImg} alt="Remover pergunta" />
+                </button>
+              </Question>
+            ))
+          )}
         </div>
       </main>
     </div>
