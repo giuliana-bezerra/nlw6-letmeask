@@ -28,7 +28,12 @@ export function Home() {
 
     const roomRef = await database.ref(`rooms/${roomCode}`).get();
     if (!roomRef.exists()) {
-      alert('A sala informada não existe!');
+      alert('A sala informada não existe.');
+      return;
+    }
+
+    if (roomRef.val().endedAt) {
+      alert('A sala informada foi fechada.');
       return;
     }
     history.push(`/rooms/${roomCode}`);
