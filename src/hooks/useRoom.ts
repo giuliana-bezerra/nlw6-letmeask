@@ -47,7 +47,9 @@ export function useRoom(roomId: string) {
     const roomRef = database.ref(`rooms/${roomId}`);
     roomRef.on('value', (room) => {
       const databaseRoom = room.val();
-      const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {};
+
+      const firebaseQuestions: FirebaseQuestions =
+        databaseRoom?.questions ?? {};
       const questionsArray = Object.entries(firebaseQuestions).map(
         ([key, value]) => {
           return {
@@ -64,11 +66,17 @@ export function useRoom(roomId: string) {
           };
         }
       );
-      setTitle(databaseRoom.title);
+
+      setTitle(databaseRoom?.title);
       setQuestions(questionsArray);
 
-      if (databaseRoom.endedAt !== undefined) {
+      if (databaseRoom?.endedAt !== undefined) {
         alert('A sala informada foi fechada.');
+        history.push('/');
+      }
+
+      if (!databaseRoom) {
+        alert('A sala informada não existe.');
         history.push('/');
       }
     });
