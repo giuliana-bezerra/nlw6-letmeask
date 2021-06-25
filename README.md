@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="letmeask" title="letmeask" src=".github/logo.png" />
+  <img alt="letmeask" title="letmeask" src=".github/logo.svg" />
 </h1>
 
 <p align="center">
@@ -19,7 +19,7 @@
 <br>
 
 <a align="center" href="https://letmeask-c4a3d.web.app">
-  <img alt="letmeask" src=".github/letmeask.png" width="100%">
+  <img alt="letmeask" src=".github/letmeask.gif" width="100%">
 </a>
 
 ## ✨ Tecnologias
