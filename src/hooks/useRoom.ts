@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { database } from '../services/firebase';
 import { useAuth } from './useAuth';
@@ -13,6 +14,7 @@ type QuestionType = {
   isHighlighted: boolean;
   likeCount: number;
   likeId: string | undefined;
+  endedAt: Date;
 };
 
 type FirebaseQuestions = Record<
@@ -31,12 +33,14 @@ type FirebaseQuestions = Record<
         authorId: string;
       }
     >;
+    endedAt: Date;
   }
 >;
 
 export function useRoom(roomId: string) {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [title, setTitle] = useState();
+  const history = useHistory();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -56,17 +60,24 @@ export function useRoom(roomId: string) {
             likeId: Object.entries(value.likes ?? {}).find(
               ([key, like]) => like.authorId === user?.id
             )?.[0],
+            endedAt: value.endedAt,
           };
         }
       );
       setTitle(databaseRoom.title);
       setQuestions(questionsArray);
+
+      if (databaseRoom.endedAt !== undefined) {
+        alert('A sala informada foi fechada.');
+        history.push('/');
+      }
     });
 
+    console.log('Calling useRoomEffect');
     return () => {
       roomRef.off('value');
     };
-  }, [roomId, user?.id]);
+  }, [roomId, user?.id, history]);
 
   return { questions, title };
 }

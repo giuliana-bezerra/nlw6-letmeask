@@ -6,6 +6,7 @@ import { EmptyQuestions } from '../components/EmptyQuestions';
 import { Header } from '../components/Header';
 import { Loading } from '../components/Loading';
 import { Question } from '../components/Question';
+import { RoomTitle } from '../components/RoomTitle';
 import { useRoom } from '../hooks/useRoom';
 import { database } from '../services/firebase';
 import '../styles/rooms.scss';
@@ -57,10 +58,7 @@ export function AdminRoom() {
     <div id="page-room">
       <Header roomId={roomId} handleEndRoom={handleEndRoom} />
       <main>
-        <div className="room-title">
-          <h1>Sala {title}</h1>
-          {questions.length > 0 && <span>{questions.length} perguntas</span>}
-        </div>
+        <RoomTitle title={title} questions={questions.length} />
         <div className="question-list">
           {questions.length === 0 ? (
             <EmptyQuestions description="Envie o código desta sala para seus amigos e comece a responder perguntas!" />

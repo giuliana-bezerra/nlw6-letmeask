@@ -5,6 +5,7 @@ import { EmptyQuestions } from '../components/EmptyQuestions';
 import { Header } from '../components/Header';
 import { Loading } from '../components/Loading';
 import { Question } from '../components/Question';
+import { RoomTitle } from '../components/RoomTitle';
 import { useAuth } from '../hooks/useAuth';
 import { useRoom } from '../hooks/useRoom';
 import { database } from '../services/firebase';
@@ -15,11 +16,15 @@ type RoomParams = {
 };
 
 export function Room() {
-  const { user } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
   const params = useParams<RoomParams>();
   const roomId = params.id;
   const [newQuestion, setNewQuestion] = useState('');
   const { questions, title } = useRoom(roomId);
+
+  async function handleSignIn() {
+    await signInWithGoogle();
+  }
 
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
@@ -68,10 +73,7 @@ export function Room() {
     <div id="page-room">
       <Header roomId={roomId} />
       <main>
-        <div className="room-title">
-          <h1>Sala {title}</h1>
-          {questions.length > 0 && <span>{questions.length} perguntas</span>}
-        </div>
+        <RoomTitle title={title} questions={questions.length} />
         <form onSubmit={handleSendQuestion}>
           <textarea
             placeholder="O que você quer perguntar?"
@@ -86,7 +88,8 @@ export function Room() {
               </div>
             ) : (
               <span>
-                Para enviar uma pergunta, <button>faça seu login</button>.
+                Para enviar uma pergunta,{' '}
+                <button onClick={handleSignIn}> seu login</button>.
               </span>
             )}
             <Button type="submit" disabled={!user}>
