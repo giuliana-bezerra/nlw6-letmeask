@@ -9,7 +9,17 @@
     max-height: 45px;
   }
 
-  > div {
+  .general {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    > img {
+      max-height: 45px;
+    }
+  }
+
+  .admin {
     display: flex;
     gap: 16px;
     button {

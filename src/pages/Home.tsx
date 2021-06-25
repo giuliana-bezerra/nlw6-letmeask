@@ -1,14 +1,12 @@
-import { useState } from 'react';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import googleImg from '../assets/images/google-icon.svg';
 import logoImg from '../assets/images/logo.svg';
 import { Button } from '../components/Button';
 import { SideBar } from '../components/SideBar';
+import { ThemeSwitcher } from '../components/ThemeSwitcher';
 import { useAuth } from '../hooks/useAuth';
 import { database } from '../services/firebase';
-
 import '../styles/auth.scss';
 
 export function Home() {
@@ -44,6 +42,7 @@ export function Home() {
       <SideBar />
       <main>
         <div className="main-content">
+          <ThemeSwitcher />
           <img src={logoImg} alt="Letmeask" />
           <button className="create-room" onClick={handleCreateRoom}>
             <img src={googleImg} alt="Logo do Google" /> Crie sua sala com o

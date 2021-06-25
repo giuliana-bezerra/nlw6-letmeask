@@ -8,6 +8,7 @@ import { Question } from '../components/Question';
 import { RoomTitle } from '../components/RoomTitle';
 import { useAuth } from '../hooks/useAuth';
 import { useRoom } from '../hooks/useRoom';
+import { useTheme } from '../hooks/useTheme';
 import { database } from '../services/firebase';
 import '../styles/rooms.scss';
 
@@ -21,6 +22,7 @@ export function Room() {
   const roomId = params.id;
   const [newQuestion, setNewQuestion] = useState('');
   const { questions, title } = useRoom(roomId);
+  const { theme } = useTheme();
 
   async function handleSignIn() {
     await signInWithGoogle();
@@ -84,12 +86,15 @@ export function Room() {
             {user ? (
               <div className="user-info">
                 <img src={user.avatar} alt={user.name} />
-                <span>{user.name}</span>
+                <span style={{ color: theme.colors.text }}>{user.name}</span>
               </div>
             ) : (
               <span>
                 Para enviar uma pergunta,{' '}
-                <button onClick={handleSignIn}> seu login</button>.
+                <button type="button" onClick={handleSignIn}>
+                  seu login
+                </button>
+                .
               </span>
             )}
             <Button type="submit" disabled={!user}>
